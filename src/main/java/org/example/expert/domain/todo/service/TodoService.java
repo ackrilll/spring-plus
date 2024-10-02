@@ -1,5 +1,6 @@
 package org.example.expert.domain.todo.service;
 
+import jakarta.validation.constraints.Null;
 import lombok.RequiredArgsConstructor;
 import org.example.expert.client.WeatherClient;
 import org.example.expert.domain.common.dto.AuthUser;
@@ -48,11 +49,16 @@ public class TodoService {
     }
 
     @Transactional(readOnly = true)
-    public Page<TodoResponse> getTodos(int page, int size) {
+    public Page<TodoResponse> getTodos(int page, int size, String weather) {
         Pageable pageable = PageRequest.of(page - 1, size);
+        Page<Todo> todos;
+        if(weather == null){
+            // weather 조건 없을 때
+             todos = todoRepository.findAllByOrderByModifiedAtDesc(pageable);
 
-        Page<Todo> todos = todoRepository.findAllByOrderByModifiedAtDesc(pageable);
-
+        } else{
+             todos = todoRepository.findByWeatherOrderByModifiedAtDesc(pageable, weather);
+        }
         return todos.map(todo -> new TodoResponse(
                 todo.getId(),
                 todo.getTitle(),
