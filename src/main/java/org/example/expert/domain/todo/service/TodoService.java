@@ -84,8 +84,7 @@ public class TodoService {
                 todo.getWeather(),
                 new UserResponse(todo.getUser().getId(), todo.getUser().getEmail()),
                 todo.getCreatedAt(),
-                todo.getModifiedAt()
-        ));
+                todo.getModifiedAt()));
     }
 
     @Transactional(readOnly = true)
