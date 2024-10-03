@@ -18,6 +18,10 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 @Transactional
@@ -49,15 +53,29 @@ public class TodoService {
     }
 
     @Transactional(readOnly = true)
-    public Page<TodoResponse> getTodos(int page, int size, String weather) {
+    public Page<TodoResponse> getTodos(int page, int size, String weather, List<LocalDate> dates) {
         Pageable pageable = PageRequest.of(page - 1, size);
         Page<Todo> todos;
-        if(weather == null){
-            // weather 조건 없을 때
+        if(weather == null && dates == null) {
+            // weather 조건, 조회 기간 없을 때
              todos = todoRepository.findAllByOrderByModifiedAtDesc(pageable);
 
-        } else{
+        } else if(weather != null && dates == null) {
+            // weather 조건만 있을 때
              todos = todoRepository.findByWeatherOrderByModifiedAtDesc(pageable, weather);
+
+        } else if(weather == null ) {
+            // 조회 기간만 있을 때
+            LocalDateTime startDate = dates.get(0).atStartOfDay();
+            LocalDateTime endDate = dates.get(1).atStartOfDay();
+
+            todos = todoRepository.findByPeriodOrderByModifiedAtDesc(pageable,startDate,endDate);
+
+        } else  {
+            // 두 조건 다 있을 때
+            LocalDateTime startDate = dates.get(0).atStartOfDay();
+            LocalDateTime endDate = dates.get(1).atStartOfDay();
+            todos = todoRepository.findByWeatherAndPeriodOrderByModifiedAtDesc(pageable,weather,startDate,endDate);
         }
         return todos.map(todo -> new TodoResponse(
                 todo.getId(),
