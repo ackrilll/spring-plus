@@ -1,11 +1,9 @@
 package org.example.expert.domain.todo.repository;
 
-import com.querydsl.jpa.JPQLQuery;
 import com.querydsl.jpa.JPQLQueryFactory;
 import lombok.RequiredArgsConstructor;
 import org.example.expert.domain.todo.entity.Todo;
 import org.springframework.stereotype.Repository;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.Optional;
 

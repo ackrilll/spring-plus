@@ -37,7 +37,7 @@ class TodoControllerTest {
         String title = "title";
         // -----------------------------UserResponse 객체 만드는데 필요한 재료들 -------------------------------------------
         String nickName = "nickName";
-        AuthUser authUser = new AuthUser(1L, "email", UserRole.USER,nickName);
+        AuthUser authUser = new AuthUser(1L, "email", UserRole.ROLE_USER,nickName);
         User user = User.fromAuthUser(authUser);
         UserResponse userResponse = new UserResponse(user.getId(), user.getEmail());
         // ---------------------------------------------------------- --------------------------------------------------

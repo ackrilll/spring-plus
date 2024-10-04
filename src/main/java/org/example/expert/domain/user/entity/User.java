@@ -33,10 +33,11 @@ public class User extends Timestamped {
         this.id = id;
         this.email = email;
         this.userRole = userRole;
+        this.nickName = nickName;
     }
 
     public static User fromAuthUser(AuthUser authUser) {
-        return new User(authUser.getId(), authUser.getEmail(), authUser.getUserRole(),authUser.getNickname());
+        return new User(authUser.getUserId(), authUser.getEmail(), authUser.getUserRole(),authUser.getNickName());
     }
 
     public void changePassword(String password) {
